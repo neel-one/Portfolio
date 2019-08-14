@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 
-STARTING_CASH = 1000
-fee = 6.95
+STARTING_CASH = 2000
+FEE = 6.95
 
 class Portfolio:
 
@@ -42,21 +42,21 @@ class Portfolio:
 			 	self.pf.loc[sec,'dCash']))
 
 	def Buy(self,sec,price,nShare,fee):
-		self.portfolio.at[len(self.portfolio.index)-1,'dCash'] = -(price*nShare+fee)
-		self.portfolio.at[len(self.portfolio.index)-1,'SellVal'] = price*nShare+2*fee
-		self.portfolio.at[len(self.portfolio.index)-1,'ShareVal'] = (price*nShare+2*fee)/nShare
+		self.portfolio.at[len(self.portfolio.index)-1,'dCash'] = -(price*nShare+FEE)
+		self.portfolio.at[len(self.portfolio.index)-1,'SellVal'] = price*nShare+2*FEE
+		self.portfolio.at[len(self.portfolio.index)-1,'ShareVal'] = (price*nShare+2*FEE)/nShare
 	
 	def Sell(self,sec,price,nShare,fee):
-		self.portfolio.at[len(self.portfolio.index)-1,'dCash'] = price*nShare-fee
+		self.portfolio.at[len(self.portfolio.index)-1,'dCash'] = price*nShare-FEE
 		self.portfolio.at[len(self.portfolio.index)-1,'SellVal'] = 0
 		self.portfolio.at[len(self.portfolio.index)-1,'ShareVal'] = 0
 	
 	def Transaction(self,sec,saletype,price,nshare,save):
-		self.portfolio = self.portfolio.append({'Sec':sec,'Type':saletype,'Price':price,'nShare':nshare,'Fee':fee},ignore_index=True)
+		self.portfolio = self.portfolio.append({'Sec':sec,'Type':saletype,'Price':price,'nShare':nshare,'FEE':FEE},ignore_index=True)
 		if(saletype == 'buy'):
-			self.Buy(sec, price, nshare, fee)
+			self.Buy(sec, price, nshare, FEE)
 		else:
-			self.Sell(sec, price, nshare, fee)
+			self.Sell(sec, price, nshare, FEE)
 		self.pf = self.portfolio.set_index('Sec',drop=True)
 		self.cash = self.getCash()
 		if(save):
@@ -65,4 +65,4 @@ class Portfolio:
 if __name__ == '__main__':
 	#do transaction (buy/sell)
 	p = Portfolio()
-	p.Transaction(input('security: \n'),input('saletype: '),input('price: '),input('nshare: '),input('save: '))
+	p.Transaction(input('security: \n'),input('saletype: '),float(input('price: ')),int(input('nshare: ')),int(input('save: ')))

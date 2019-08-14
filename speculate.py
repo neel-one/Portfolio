@@ -26,7 +26,7 @@ def PriceIncreasePerShare():
 
 def PercentIncreasePerShare(price):
 	x = np.array(range(30))
-	y =  (x*price+13.9)/price/x
+	y =  100*(13.9/x)/price
 	df = DF(x=x,y=y,labelx='Num Shares',labely='Percent Increase Required')
 	return (g.ggplot(data=df,mapping=g.aes(x='Num Shares',y='Percent Increase Required'))
 		+g.geom_point()
@@ -34,11 +34,10 @@ def PercentIncreasePerShare(price):
 
 def PercentIncrease():
 	ax = plt.axes(projection='3d')
-	x=4+np.random.randn(100)
-	y=5*(10+5*np.random.randn(100))
-	#increase + share price / share price
-	z=(13.9/x + y)/y
-	ax.set_zlim(1, 1.15)
+	x=4+np.random.randn(100) #nshares
+	y=5*(10+5*np.random.randn(100)) #price
+	z=100*(13.9/x)/y
+	ax.set_zlim(0, 10)
 	plot = ax.scatter3D(x,y,z)
 	plt.show()
 	return plot
@@ -59,6 +58,6 @@ def CreatePercentIncreaseFile():
 	df = pd.DataFrame(0, index=np.arange(1,100),columns=np.arange(1,10))
 	for i in range(1,101):
 		for j in range(1,11):
-			df[i][j]=(13.9/j + i)/i
+			df.at[i,j]=(100*(13.9/i)/j)
 	df.to_csv('PercentIncrease.csv')
 
